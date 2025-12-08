@@ -16,6 +16,7 @@ Thumbs.db
 
 # Project docs (local only)
 .claude/
+CLAUDE.md
 
 # Logs
 *.log
