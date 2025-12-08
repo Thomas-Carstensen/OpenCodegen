@@ -1,0 +1,32 @@
+{
+  "name": "opencodegen",
+  "version": "0.1.0",
+  "description": "Generate typed API clients from OpenAPI specifications",
+  "type": "module",
+  "bin": {
+    "opencodegen": "./dist/cli/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/cli/index.js"
+  },
+  "keywords": [
+    "openapi",
+    "codegen",
+    "typescript",
+    "api-client"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@apidevtools/swagger-parser": "^10.1.0",
+    "chalk": "^5.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}
