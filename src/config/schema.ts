@@ -85,6 +85,25 @@ export interface CodegenConfig {
    * @default 'null'
    */
   nullableType: 'null' | 'undefined';
+
+  /**
+   * How to name methods in generated client classes.
+   *
+   * - `'operationId'` - Use the operationId from the OpenAPI spec (e.g., `listPets`, `createPet`)
+   *
+   * @default 'operationId'
+   */
+  methodNameStyle?: 'operationId';
+
+  /**
+   * Suffix for generated client class names.
+   *
+   * - `'Client'` - `PetsClient`, `StoreClient`
+   * - `'Api'` - `PetsApi`, `StoreApi`
+   *
+   * @default 'Client'
+   */
+  clientSuffix?: 'Client' | 'Api';
 }
 
 /**

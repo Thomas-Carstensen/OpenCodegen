@@ -71,19 +71,19 @@ describe('resolveRef', () => {
     expect(result.version).toBe('1.0.0');
   });
 
-  test('throws for external references', () => {
+  test('throws for URL references with helpful message', () => {
     const doc = createDoc({});
 
     expect(() => resolveRef(doc, 'https://example.com/schema.json#/Pet')).toThrow(
-      'External $ref not supported',
+      'URL $ref not supported',
     );
   });
 
-  test('throws for relative file references', () => {
+  test('throws for relative file references with helpful message', () => {
     const doc = createDoc({});
 
     expect(() => resolveRef(doc, './common.yaml#/components/schemas/Pet')).toThrow(
-      'External $ref not supported',
+      'External file $ref not supported',
     );
   });
 

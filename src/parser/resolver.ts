@@ -10,7 +10,21 @@ import type {OpenAPIV3} from 'openapi-types';
  */
 export const resolveRef = <T>(doc: OpenAPIV3.Document, ref: string): T => {
   if (!ref.startsWith('#/')) {
-    throw new Error(`External $ref not supported: ${ref}`);
+    // Detect URL refs (http:// or https://)
+    if (ref.startsWith('http://') || ref.startsWith('https://')) {
+      throw new Error(
+        `URL $ref not supported: ${ref}\n` +
+          `  OpenCodegen currently only supports internal references (#/components/...).\n` +
+          `  Consider inlining the referenced schema into your OpenAPI document.`
+      );
+    }
+
+    // Detect external file refs (anything else without #/ prefix)
+    throw new Error(
+      `External file $ref not supported: ${ref}\n` +
+        `  OpenCodegen currently only supports internal references (#/components/...).\n` +
+        `  Consider merging your OpenAPI files into a single document.`
+    );
   }
 
   const path = ref.slice(2).split('/'); // Remove "#/" and split
