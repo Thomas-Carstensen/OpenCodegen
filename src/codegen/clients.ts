@@ -256,6 +256,11 @@ const generateParamsType = (params: OpenAPIV3.ParameterObject[], config: Codegen
 /**
  * Generate a single method for an operation.
  */
+/**
+ * Request options that can be passed to each method.
+ */
+const REQUEST_OPTIONS_TYPE = '{ headers?: Record<string, string> }';
+
 const generateMethod = (op: ParsedOperation, config: CodegenConfig): string => {
   const methodName = op.operationId;
 
@@ -284,6 +289,9 @@ const generateMethod = (op: ParsedOperation, config: CodegenConfig): string => {
     args.push(`params?: ${paramsType}`);
   }
 
+  // Per-request options (always last, always optional)
+  args.push(`requestOptions?: ${REQUEST_OPTIONS_TYPE}`);
+
   // Build path with interpolation
   let pathExpr = op.path;
   for (const param of pathParams) {
@@ -302,8 +310,10 @@ const generateMethod = (op: ParsedOperation, config: CodegenConfig): string => {
   if (bodyType) {
     requestOpts.push('body');
   }
+  // Always include headers from requestOptions
+  requestOpts.push('headers: requestOptions?.headers');
 
-  const optsArg = requestOpts.length > 0 ? `, { ${requestOpts.join(', ')} }` : '';
+  const optsArg = `, { ${requestOpts.join(', ')} }`;
 
   // Build method
   const lines: string[] = [
