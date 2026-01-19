@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import {existsSync} from 'node:fs';
 import {resolve} from 'node:path';
+import {generateCode, writeGeneratedFiles} from '../../codegen/index.js';
 import {loadConfig} from '../../config/loader.js';
 import {getSpecSummary, parseOpenApiSpec} from '../../parser/index.js';
 
@@ -95,5 +96,29 @@ export const generate = async (options: GenerateOptions): Promise<void> => {
   }
   console.log();
 
-  console.log(chalk.yellow('Code generation not yet implemented - coming next'));
+  // Generate code
+  if (verbose) {
+    console.log(chalk.dim('Generating code...'));
+  }
+
+  const files = generateCode(doc, config);
+
+  // Write files
+  const targetDir = resolve(configPath, '..', config.target);
+
+  if (verbose) {
+    console.log(chalk.dim(`Writing files to ${targetDir}`));
+  }
+
+  try {
+    await writeGeneratedFiles(files, targetDir);
+  } catch (error) {
+    throw exitWithError(`Failed to write generated files: ${getErrorMessage(error)}`);
+  }
+
+  // Success message
+  console.log(chalk.green(`Generated ${files.size} file(s) in ${config.target}`));
+  for (const filename of files.keys()) {
+    console.log(`  ${chalk.cyan(filename)}`);
+  }
 };

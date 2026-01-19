@@ -54,12 +54,37 @@ export interface CodegenConfig {
   /**
    * How to generate TypeScript types for OpenAPI enums.
    *
+   * - `'constObject'` - Const object with derived type (recommended):
+   *   ```ts
+   *   const Status = { Active: 'active', Inactive: 'inactive' } as const;
+   *   type Status = typeof Status[keyof typeof Status];
+   *   ```
    * - `'union'` - String union type: `type Status = 'active' | 'inactive'`
    * - `'enum'` - TypeScript enum: `enum Status { Active = 'active' }`
    *
-   * @default 'union'
+   * @default 'constObject'
    */
-  enumType: 'union' | 'enum';
+  enumType: 'constObject' | 'union' | 'enum';
+
+  /**
+   * How to name properties in generated interfaces.
+   *
+   * - `'original'` - Keep property names as defined in the OpenAPI spec (e.g., `created_at`)
+   * - `'camelCase'` - Convert to camelCase (e.g., `createdAt`)
+   *
+   * @default 'original'
+   */
+  propertyNameStyle: 'original' | 'camelCase';
+
+  /**
+   * How to represent nullable fields in generated types.
+   *
+   * - `'null'` - Use `| null` (e.g., `name: string | null`)
+   * - `'undefined'` - Use `| undefined` (e.g., `name: string | undefined`)
+   *
+   * @default 'null'
+   */
+  nullableType: 'null' | 'undefined';
 }
 
 /**
